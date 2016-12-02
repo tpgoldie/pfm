@@ -1,6 +1,7 @@
 package com.tpg.pfm.domain.specs;
 
 import com.tpg.pfm.domain.Market;
+import com.tpg.pfm.domain.fs.FileHeader;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -10,13 +11,10 @@ import static com.tpg.pfm.domain.Market.NewZealand;
 import static com.tpg.pfm.domain.Market.Singapore;
 import static com.tpg.pfm.domain.Market.UK;
 import static com.tpg.pfm.domain.Market.USA;
-import static com.tpg.pfm.domain.fixtures.FileNameFixture.validVstFileName;
-import static com.tpg.pfm.domain.fixtures.FileNameFixture.vstFileNameWithMarketIdInvalidLength;
-import static com.tpg.pfm.domain.fixtures.FileNameFixture.vstFileNameWithNotListedMarketId;
+import static com.tpg.pfm.domain.fixtures.FileNameFixture.*;
 import static com.tpg.pfm.domain.specs.MarketIdSpecification.ErrorCode.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasProperty;
 
 public class MarketIdSpecificationTest {
     private static final DateTime NOW = new DateTime();
@@ -73,5 +71,14 @@ public class MarketIdSpecificationTest {
         assertThat(actual.isSatisfied(), is(false));
 
         assertThat(actual.getErrorCode().get(), is(B));
+    }
+
+    @Test
+    public void invalidateMarketIdNotMatchingHeader_marketIdNotMatchingHeader_marketIdInvalidated() {
+        FileHeader fileHeader = new FileHeader(String.format("%d,%s", USA.getCode(), "AM1234"));
+        Outcome<MarketIdSpecification.ErrorCode> actual = specification.isSatisfiedBy(fileHeader, vstFileNameWithHeaderMarketNotMatching(UK.getCode(), NOW));
+
+        assertThat(actual.isSatisfied(), is(false));
+        assertThat(actual.getErrorCode().get(), is(N));
     }
 }
