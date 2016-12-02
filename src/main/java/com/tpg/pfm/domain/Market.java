@@ -1,23 +1,15 @@
 package com.tpg.pfm.domain;
 
-import com.google.common.base.Optional;
-
 public enum Market {
-    UK(10, "UK");
+    UK(10), USA(20), Australia(30), Singapore(40), Canada(50), NewZealand(60);
 
     private final int code;
-    private final String description;
 
-    Market(int code, String description) {
+    Market(int code) {
         this.code = code;
-        this.description = description;
     }
 
     public int getCode() {
         return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

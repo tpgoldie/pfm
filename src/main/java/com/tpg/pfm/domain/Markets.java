@@ -6,15 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.base.Optional.fromNullable;
-import static com.tpg.pfm.domain.Market.UK;
 
 public class Markets {
     private static final Map<Integer, Market> marketsByCode = createMarketsByCode();
 
     private static Map<Integer, Market> createMarketsByCode() {
-        HashMap<Integer, Market> mapping = new HashMap<Integer, Market>();
+        HashMap<Integer, Market> mapping = new HashMap<>();
 
-        mapping.put(UK.getCode(), UK);
+        for (Market market : Market.values()) {
+            mapping.put(market.getCode(), market);
+        }
 
         return mapping;
     }
